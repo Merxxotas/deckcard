@@ -1,0 +1,34 @@
+.App {
+  text-align: center;
+  justify-content: center;
+  /* display: grid; */
+  width: 100%;
+}
+.deck-board {
+  justify-content: center;
+  align-items: center;
+  display: block;
+}
+.card-list {
+  flex-wrap: wrap;
+  width: 90%;
+  padding: 10px;
+}
+.card-image {
+  width: 90px;
+  margin: 5px;
+}
+button {
+  height: 40px;
+  width: 150px;
+  margin: 20px;
+  background-color: dodgerblue;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  font-size: 17px;
+  border: none;
+}
+button:hover {
+  cursor: pointer;
+}
