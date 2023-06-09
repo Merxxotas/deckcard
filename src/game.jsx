@@ -21,7 +21,9 @@ const App = () => {
 
   const mapFrecuency = (f) =>{
     Object.entries(f).map(([elemento, frecuencia]) => {
-
+      if (frecuencia<=1){
+        
+      }
     })
   }
 
