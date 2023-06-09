@@ -116,100 +116,121 @@
 
 // export default App;
 
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+// import React, { useState, useEffect } from 'react';
+// import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
-function Home({ personas, setPersonas }) {
-  const [nombrePersona1, setNombrePersona1] = useState('');
-  const [nombrePersona2, setNombrePersona2] = useState('');
-  const [personasIds, setPersonasIds] = useState([]);
+// function Home({ personas, setPersonas }) {
+//   const [nombrePersona1, setNombrePersona1] = useState('');
+//   const [nombrePersona2, setNombrePersona2] = useState('');
+//   const [personasIds, setPersonasIds] = useState([]);
 
-  useEffect(() => {
-    const fetchPersonaId = async () => {
-      try {
-        const response = await fetch('https://deckofcardsapi.com/api/deck/new/');
-        const data = await response.json();
-        setPersonasIds((prevIds) => [...prevIds, data.deck_id]);
-      } catch (error) {
-        console.error('Error al obtener el ID de la persona:', error);
-      }
-    };
+//   useEffect(() => {
+//     const fetchPersonaId = async () => {
+//       try {
+//         const response = await fetch('https://deckofcardsapi.com/api/deck/new/');
+//         const data = await response.json();
+//         setPersonasIds((prevIds) => [...prevIds, data.deck_id]);
+//       } catch (error) {
+//         console.error('Error al obtener el ID de la persona:', error);
+//       }
+//     };
   
-    if (nombrePersona1 && nombrePersona2) {
-      fetchPersonaId();
-    }
-  }, [nombrePersona1, nombrePersona2, setPersonasIds]);
+//     if (nombrePersona1 && nombrePersona2) {
+//       fetchPersonaId();
+//     }
+//   }, [nombrePersona1, nombrePersona2, setPersonasIds]);
 
-  const registrarNombres = () => {
-    if (nombrePersona1 && nombrePersona2) {
-      setPersonas([
-        ...personas,
-        { nombre: nombrePersona1, id: personasIds[personas.length] },
-        { nombre: nombrePersona2, id: personasIds[personas.length + 1] },
-      ]);
-      setNombrePersona1('');
-      setNombrePersona2('');
-    }
+//   const registrarNombres = () => {
+//     if (nombrePersona1 && nombrePersona2) {
+//       setPersonas([
+//         ...personas,
+//         { nombre: nombrePersona1, id: personasIds[personas.length] },
+//         { nombre: nombrePersona2, id: personasIds[personas.length + 1] },
+//       ]);
+//       setNombrePersona1('');
+//       setNombrePersona2('');
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <h1>Registro de Personas</h1>
+//       <label>Persona 1: </label>
+//       <input
+//         type="text"
+//         value={nombrePersona1}
+//         onChange={(e) => setNombrePersona1(e.target.value)}
+//       />
+//       <br />
+//       <label>Persona 2: </label>
+//       <input
+//         type="text"
+//         value={nombrePersona2}
+//         onChange={(e) => setNombrePersona2(e.target.value)}
+//       />
+//       <br />
+//       <button onClick={registrarNombres}>Registrar</button>
+//       <br />
+//       <Link to="/personas-registradas">Ver personas registradas</Link>
+//     </div>
+//   );
+// }
+
+// function PersonasRegistradas({ personas }) {
+//   if (!personas || personas.length === 0) {
+//     return <p>No personas available.</p>;
+//   }
+
+//   return (
+//     <div>
+//       <h2>Personas registradas:</h2>
+//       {personas.map((persona) => (
+//         <p key={persona.id}>{persona.nombre}</p>
+//       ))}
+//     </div>
+//   );
+// }
+
+// function App() {
+//   const [personas, setPersonas] = useState([]);
+
+//   return (
+//     <Router>
+//       <div>
+//       <Routes>
+//   <Route
+//     path="/"
+//     element={<Home personas={personas} setPersonas={setPersonas} />}
+//   />
+//   <Route
+//     path="/personas-registradas"
+//     element={<PersonasRegistradas personas={personas} />}
+//   />
+// </Routes>
+//       </div>
+//     </Router>
+//   );
+// }
+
+// export default App;
+import React, { useState } from 'react';
+import Home from './home';
+import Game from './game';
+
+const App = () => {
+  const [gameStarted, setGameStarted] = useState(false);
+  const [deckId, setDeckId] = useState('');
+
+  const startGame = (id) => {
+    setGameStarted(true);
+    setDeckId(id);
   };
 
   return (
-    <div>
-      <h1>Registro de Personas</h1>
-      <label>Persona 1: </label>
-      <input
-        type="text"
-        value={nombrePersona1}
-        onChange={(e) => setNombrePersona1(e.target.value)}
-      />
-      <br />
-      <label>Persona 2: </label>
-      <input
-        type="text"
-        value={nombrePersona2}
-        onChange={(e) => setNombrePersona2(e.target.value)}
-      />
-      <br />
-      <button onClick={registrarNombres}>Registrar</button>
-      <br />
-      <Link to="/personas-registradas">Ver personas registradas</Link>
+    <div className="App">
+      {!gameStarted ? <Home startGame={startGame} /> : <Game deckId={deckId} />}
     </div>
   );
-}
-
-function PersonasRegistradas({ personas }) {
-  if (!personas || personas.length === 0) {
-    return <p>No personas available.</p>;
-  }
-
-  return (
-    <div>
-      <h2>Personas registradas:</h2>
-      {personas.map((persona) => (
-        <p key={persona.id}>{persona.nombre}</p>
-      ))}
-    </div>
-  );
-}
-
-function App() {
-  const [personas, setPersonas] = useState([]);
-
-  return (
-    <Router>
-      <div>
-      <Routes>
-  <Route
-    path="/"
-    element={<Home personas={personas} setPersonas={setPersonas} />}
-  />
-  <Route
-    path="/personas-registradas"
-    element={<PersonasRegistradas personas={personas} />}
-  />
-</Routes>
-      </div>
-    </Router>
-  );
-}
+};
 
 export default App;
