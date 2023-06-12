@@ -1,26 +1,15 @@
-React Deck of Cards App
+React App juego de cartas
 =======================
 
-This project is a fun web application built using ReactJS and the [deckofcardsapi.com](https://deckofcardsapi.com/) API, allowing users to click a button to draw a random card.
+Este proyecto es usado mediante las tecnologias de REACT y el consumo de la siguiente API: [deckofcardsapi.com](https://deckofcardsapi.com/) Permitiendo a los usuarios traer de a una carta para su propio beneficio.
 
-Features
---------
-
--   Generates random cards from the API using the "give me a card" button.
--   Displays the drawn card on the screen.
-
-Technologies
+Tecnologías
 ------------
 
--   ReactJS
+-   React
 -   deckofcardsapi.com API
-
-Demo
-----
-
-Check out the live demo [here](https://deck-of-cards-app.netlify.app/)!
-
-Installation
+-   
+Se ejecunta usando:
 ------------
 
 1.  Clone the repository: `git clone https://github.com/shahsuvarli/deck-cards.git`
@@ -28,14 +17,13 @@ Installation
 3.  Install dependencies: `npm install`
 4.  Start the app: `npm start`
 
-Credits
+Programación Distribuida y paralela
 -------
 
--   [ReactJS](https://reactjs.org/)
--   [deckofcardsapi.com](https://deckofcardsapi.com/)
+-   Brayan Marín Guirales
+-   Pedro Hernán Cordoba Diosa
 
-License
+Politécnico Colombiano Jaime Isaza Cadavid 2023-1
 -------
 
-This project is licensed under the MIT License
-# deckcards
+No mirar los nombres de los commits, son para mero objetivo de entretener (?)
