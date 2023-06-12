@@ -12,10 +12,10 @@ Tecnologías
 Se ejecunta usando:
 ------------
 
-1.  Clone the repository: `git clone https://github.com/shahsuvarli/deck-cards.git`
-2.  Navigate to the project directory: `cd deck-cards`
-3.  Install dependencies: `npm install`
-4.  Start the app: `npm start`
+1.  Clonar el repositorio
+2.  ir hasta la carpeta: `cd deck-cards`
+3.  Instalar Dependencias: `npm install`
+4.  Iniciar la APP: `npm start`
 
 Programación Distribuida y paralela
 -------
