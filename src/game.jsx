@@ -136,7 +136,6 @@
 // export default App;
 
 import React, { useState } from "react";
-import { countBy } from "lodash";
 import { Button, TextField, Grid, Typography } from "@mui/material";
 
 const App = () => {
@@ -147,6 +146,8 @@ const App = () => {
   const [player2Cards, setPlayer2Cards] = useState([]);
   const [gameStarted, setGameStarted] = useState(false);
   const [matchedCards, setMatchedCards] = useState([]);
+  const [player1DiscardedCards, setPlayer1DiscardedCards] = useState([]);
+  const [player2DiscardedCards, setPlayer2DiscardedCards] = useState([]);
 
   const startGame = async () => {
     try {
@@ -180,48 +181,84 @@ const App = () => {
     }
   };
 
-  const drawCard = async () => {
-    try {
-      // Obtener una carta para cada jugador
-      const player1Response = await fetch(
-        `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
-      );
-      const player1Data = await player1Response.json();
-      const player1Card = player1Data.cards[0];
-      setPlayer1Cards((prevCards) => [...prevCards, player1Card]);
+// ...
 
-      const player2Response = await fetch(
-        `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
-      );
-      const player2Data = await player2Response.json();
-      const player2Card = player2Data.cards[0];
-      setPlayer2Cards((prevCards) => [...prevCards, player2Card]);
-
-      // Verificar coincidencias de valor
-      checkCardValue(player1Card, player1Cards);
-      checkCardValue(player2Card, player2Cards);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const checkCardValue = (newCard, playerCards) => {
-    const cardsWithSameValue = playerCards.filter(
-      (card) => card.value === newCard.value
+const drawCard = async () => {
+  try {
+    // Obtener una carta para cada jugador
+    const player1Response = await fetch(
+      `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
     );
+    const player1Data = await player1Response.json();
+    const player1Card = player1Data.cards[0];
 
-    if (cardsWithSameValue.length >= 3) {
-      const matchedCardNumbers = cardsWithSameValue.map((card) => card.value);
-      setMatchedCards(matchedCardNumbers);
+    const player2Response = await fetch(
+      `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
+    );
+    const player2Data = await player2Response.json();
+    const player2Card = player2Data.cards[0];
+
+    // Verificar si el jugador 1 necesita descartar una carta
+    let newPlayer1Cards = player1Cards;
+    if (player1Cards.length === 10) {
+      const cardToDiscard = player1Cards.find((card) =>
+        !checkCardValue(card, [...player1Cards, player1Card], player1Name)
+      );
+      if (cardToDiscard) {
+        newPlayer1Cards = player1Cards.filter((card) => card !== cardToDiscard);
+        setPlayer1DiscardedCards((prevCards) => [...prevCards, cardToDiscard]);
+      }
     }
 
-    if (cardsWithSameValue.length >= 4) {
-      const matchedCardNumbers = cardsWithSameValue.map((card) => card.value);
-      setMatchedCards(matchedCardNumbers);
+    // Verificar si el jugador 2 necesita descartar una carta
+    let newPlayer2Cards = player2Cards;
+    if (player2Cards.length === 10) {
+      const cardToDiscard = player2Cards.find((card) =>
+        !checkCardValue(card, [...player2Cards, player2Card], player2Name)
+      );
+      if (cardToDiscard) {
+        newPlayer2Cards = player2Cards.filter((card) => card !== cardToDiscard);
+        setPlayer2DiscardedCards((prevCards) => [...prevCards, cardToDiscard]);
+      }
     }
 
-    console.log("Coincidencias: ", cardsWithSameValue.length);
-  };
+    // Actualizar las cartas de los jugadores
+    setPlayer1Cards((prevCards) => [...newPlayer1Cards, player1Card]);
+    setPlayer2Cards((prevCards) => [...newPlayer2Cards, player2Card]);
+
+    // Verificar coincidencias de valor
+    checkCardValue(player1Card, newPlayer1Cards, player1Name);
+    checkCardValue(player2Card, newPlayer2Cards, player2Name);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const checkCardValue = (newCard, playerCards, playerName) => {
+  const cardsWithSameValue = playerCards.filter(
+    (card) => card.value === newCard.value
+  );
+
+  if (cardsWithSameValue.length >= 4) {
+    console.log(`¡${playerName} tiene 4 cartas del mismo valor!`);
+    return true;
+  }
+
+  if (cardsWithSameValue.length === 3) {
+    const remainingCards = playerCards.filter(
+      (card) => card.value !== newCard.value
+    );
+    const remainingValues = remainingCards.map((card) => card.value);
+    const remainingValueSet = new Set(remainingValues);
+
+    if (!remainingValueSet.has(newCard.value)) {
+      console.log(`¡${playerName} tiene 3 cartas del mismo valor!`);
+      return true;
+    }
+  }
+
+  return false;
+};
 
   return (
     <div>
@@ -294,3 +331,4 @@ const App = () => {
 };
 
 export default App;
+
