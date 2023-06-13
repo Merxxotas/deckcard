@@ -12,14 +12,12 @@
 //   const mapHand = (playercards) => {
 //     {
 //       const newHand = [...mano]
-//       playercards.map((cards, index) => {      
-//         newHand[index] = cards.value   
+//       playercards.map((cards, index) => {
+//         newHand[index] = cards.value
 //         setMano(newHand)
 //       });
 //     }
 //   };
-
- 
 
 //   useEffect(() => {
 //     const fetchCards = async () => {
@@ -148,6 +146,7 @@ const App = () => {
   const [player1Cards, setPlayer1Cards] = useState([]);
   const [player2Cards, setPlayer2Cards] = useState([]);
   const [gameStarted, setGameStarted] = useState(false);
+  const [matchedCards, setMatchedCards] = useState([]);
 
   const startGame = async () => {
     try {
@@ -211,9 +210,17 @@ const App = () => {
       (card) => card.value === newCard.value
     );
 
-    if (cardsWithSameValue.length >= 4) {
-      console.log(`¡Jugador tiene 4 cartas del mismo valor!`);
+    if (cardsWithSameValue.length >= 3) {
+      const matchedCardNumbers = cardsWithSameValue.map((card) => card.value);
+      setMatchedCards(matchedCardNumbers);
     }
+
+    if (cardsWithSameValue.length >= 4) {
+      const matchedCardNumbers = cardsWithSameValue.map((card) => card.value);
+      setMatchedCards(matchedCardNumbers);
+    }
+
+    console.log("Coincidencias: ", cardsWithSameValue.length);
   };
 
   return (
@@ -269,6 +276,17 @@ const App = () => {
               />
             ))}
           </div>
+          {matchedCards.length >= 3 && (
+            <Typography variant="h6">
+              ¡Hay cartas con el mismo número: {matchedCards.join(", ")}!
+            </Typography>
+          )}
+
+          {matchedCards.length >= 4 && (
+            <Typography variant="h6">
+              ¡Hay cartas con el mismo número: {matchedCards.join(", ")}!
+            </Typography>
+          )}
         </div>
       )}
     </div>
